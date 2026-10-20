@@ -167,7 +167,21 @@ These relationships are complex, and WSS alone cannot reliably predict aneurysm 
 
 **Numerical limitation:** The present mesh contains only 3,882 tetrahedral cells and lacks dedicated near-wall refinement. Consequently, the WSS distribution should be interpreted qualitatively. The reported values have not been established as mesh-independent or clinically accurate.
 
-### 4. Mass Conservation Check
+### 4. Intra-aneurysmal Flow and Recirculation
+
+![Intra-aneurysmal flow and recirculation](outputs/figures/intra_aneurysmal_flow_closeup.png)
+
+*Figure 7. Close-up visualisation of velocity-coloured streamlines within the synthetic sidewall aneurysm. The translucent vessel surface reveals recirculating flow within the aneurysm sac, contrasting with the predominantly axial flow in the parent artery.*
+
+The simulation demonstrates a region of relatively slow, recirculating flow within the aneurysm sac. Streamlines entering the aneurysm neck follow curved trajectories within the sac, while much of the parent arterial flow continues downstream.
+
+The streamlines are coloured according to velocity magnitude (m/s), with blue indicating lower velocities and yellow-to-red indicating higher velocities.
+
+**Clinical relevance:** Intra-aneurysmal flow patterns, including recirculation, flow impingement and regions of low velocity, are relevant to research investigating aneurysm haemodynamics, wall remodelling and thrombosis.
+
+**Numerical limitation:** These streamlines represent a steady-state laminar flow solution and should not be interpreted as evidence of turbulence. Their appearance depends partly on streamline seed placement. The coarse mesh, idealised geometry and simplified boundary conditions limit quantitative and clinical interpretation.
+
+### 5. Mass Conservation Check
 
 Global volumetric flow balance was assessed using OpenFOAM's `patchFlowRate` post-processing function applied to the saved solution at simulation time 93.
 
@@ -180,7 +194,7 @@ The inlet and outlet flow rates were equal in magnitude to the reported numerica
 
 This supports global mass conservation in the saved solution. It does not, however, establish solver convergence, local continuity accuracy or mesh independence, which require additional verification.
 
-### 5. Solver Convergence Verification
+### 6. Solver Convergence Verification
 
 The steady-state simulation was continued from the saved solution at iteration 93, with the solver output preserved in the [convergence log](outputs/logs/solver_convergence.txt).
 
