@@ -20,6 +20,7 @@ solver          incompressibleFluid;
 // For a steady-state simulation, these steps represent iterations,
 // not elapsed physiological time.
 
+// Start a fresh simulation from the initial conditions.
 startFrom       startTime;
 startTime       0;
 

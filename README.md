@@ -2,7 +2,7 @@
 
 **A computational investigation of blood-flow characteristics in a synthetic intracranial saccular aneurysm using OpenFOAM.**
 
-**Project status:** In development
+**Project status:** Initial synthetic aneurysm CFD demonstration completed. Mesh refinement, numerical validation, comparative haemodynamic analysis and patient-derived modelling remain planned extensions.
 
 ## Clinical Background
 
@@ -113,7 +113,91 @@ The initial mesh passed OpenFOAM's standard quality checks, establishing a suita
 
 However, passing these checks does not demonstrate that the mesh is sufficiently refined for accurate haemodynamic measurements. Further refinement, particularly near the aneurysm neck and vessel walls, and a mesh-convergence study will be required before interpreting quantitative wall shear stress results.
 
-**Current milestone:** Synthetic geometry construction, preliminary tetrahedral meshing and initial OpenFOAM mesh validation completed. Blood-flow simulation remains in development.
+## Simulation Results
+
+The synthetic aneurysm was investigated using a steady-state, incompressible, laminar-flow simulation in OpenFOAM 14. The following visualisations demonstrate the resulting velocity distribution, flow recirculation and wall shear stress.
+
+These results are preliminary and intended to demonstrate the computational workflow rather than provide clinically validated haemodynamic measurements.
+
+### 1. Blood-flow Velocity Distribution
+
+![Velocity magnitude across the synthetic aneurysm](outputs/figures/velocity_magnitude_cross_section_preliminary.png)
+
+*Figure 3. Longitudinal cross-section showing blood-flow velocity magnitude within the synthetic sidewall aneurysm and parent artery.*
+
+The simulation demonstrates relatively faster flow through the parent artery and lower velocities within portions of the aneurysm sac.
+
+This pattern is consistent with the development of regions of slower blood movement within an aneurysmal dilatation. Such regions may be relevant to blood residence time and thrombosis, although neither can be reliably predicted from this preliminary steady-state simulation alone.
+
+### 2. Blood-flow Streamlines and Intra-aneurysmal Recirculation
+
+Streamlines illustrate the direction of blood flow through the parent artery and aneurysm. They provide a useful way to visualise how the aneurysm alters the local flow pattern.
+
+![Parent artery velocity streamlines](outputs/figures/parent_artery_streamlines_preliminary.png)
+
+*Figure 4. Velocity-coloured streamlines illustrating blood flow through the parent artery adjacent to the synthetic aneurysm.*
+
+![Intra-aneurysmal recirculation and parent artery streamlines](outputs/figures/aneurysm_velocity_streamlines.png)
+
+*Figure 5. Combined visualisation of parent-artery flow and apparent intra-aneurysmal recirculation. Streamlines are coloured by velocity magnitude, with the vessel walls rendered semi-transparent.*
+
+The simulation demonstrates relatively direct flow through the parent artery and more complex flow trajectories within the aneurysm sac, including apparent recirculation.
+
+**Clinical relevance:** Flow recirculation and regions of reduced velocity may influence blood residence time and local thrombotic processes. However, recirculation does not necessarily indicate turbulence, and the present steady-state simulation cannot establish thrombus formation or predict aneurysm rupture.
+
+### 3. Wall Shear Stress Distribution
+
+Wall shear stress (WSS) describes the tangential force exerted by flowing blood on the vessel wall. It is an important haemodynamic parameter in research investigating intracranial aneurysm development, vascular remodelling and rupture.
+
+![Wall shear stress distribution across the synthetic aneurysm](outputs/figures/aneurysm_wall_shear_stress.png)
+
+*Figure 6. Preliminary wall shear stress distribution across the synthetic sidewall aneurysm and parent artery, expressed in pascals (Pa).*
+
+The simulation demonstrates relatively low calculated WSS within much of the aneurysm sac, compared with portions of the parent artery. The distribution is heterogeneous, particularly around the aneurysm neck and along the parent vessel.
+
+WSS was calculated using OpenFOAM's `wallShearStress` function and converted from kinematic stress to dynamic stress using the assumed blood density:
+
+\[
+\mathrm{WSS\ (Pa)} = 1060 \times |\mathrm{wallShearStress}|
+\]
+
+**Clinical relevance:** Both elevated and reduced WSS have been implicated in different pathways of aneurysm wall remodelling. Low WSS may be associated with endothelial dysfunction and inflammatory processes, while elevated WSS and local flow impingement may contribute to other forms of vascular wall injury.
+
+These relationships are complex, and WSS alone cannot reliably predict aneurysm rupture or thrombosis.
+
+**Numerical limitation:** The present mesh contains only 3,882 tetrahedral cells and lacks dedicated near-wall refinement. Consequently, the WSS distribution should be interpreted qualitatively. The reported values have not been established as mesh-independent or clinically accurate.
+
+### 4. Mass Conservation Check
+
+Global volumetric flow balance was assessed using OpenFOAM's `patchFlowRate` post-processing function applied to the saved solution at simulation time 93.
+
+| Boundary | Volumetric flow rate |
+|---|---|
+| Inlet | −3.82683 × 10⁻⁶ m³/s |
+| Outlet | +3.82683 × 10⁻⁶ m³/s |
+
+The inlet and outlet flow rates were equal in magnitude to the reported numerical precision, corresponding to a calculated global flow-rate discrepancy of 0.000% using the displayed values.
+
+This supports global mass conservation in the saved solution. It does not, however, establish solver convergence, local continuity accuracy or mesh independence, which require additional verification.
+
+### 5. Solver Convergence Verification
+
+The steady-state simulation was continued from the saved solution at iteration 93, with the solver output preserved in the [convergence log](outputs/logs/solver_convergence.txt).
+
+OpenFOAM reported convergence of the SIMPLE algorithm at iteration 101, satisfying the configured residual criteria.
+
+OpenFOAM reported convergence of the SIMPLE algorithm at iteration 101, satisfying the configured residual criteria:
+
+| Variable | Residual threshold |
+|---|---|
+| Pressure (`p`) | 1 × 10⁻⁵ |
+| Velocity (`U`) | 1 × 10⁻⁶ |
+
+At iteration 101, the initial residuals for all three velocity components and pressure were below their respective convergence thresholds.
+
+Together with the inlet–outlet flow balance assessed at iteration 93, these results provide preliminary numerical verification of the CFD solution.
+
+**Limitations:** Residual convergence and global mass conservation do not establish mesh independence or physical accuracy. The current tetrahedral mesh is coarse, lacks dedicated near-wall refinement, and has not undergone a mesh-convergence study. Consequently, wall shear stress distributions remain preliminary and should be interpreted qualitatively rather than as validated haemodynamic measurements.
 
 ---
 
@@ -134,34 +218,133 @@ These dimensions are illustrative and do not represent patient-specific anatomy.
 
 ### Fluid Dynamics
 
-Blood flow will initially be modelled using the incompressible Navier–Stokes equations.
+Blood flow was modelled using the incompressible Navier–Stokes equations under steady-state, laminar-flow assumptions.
 
-Initial assumptions include:
+The initial simulation used the following parameters:
 
-- Newtonian fluid behaviour
-- Incompressible flow
-- Rigid vessel walls
-- No-slip wall boundary conditions
-- Laminar flow
-- Simplified inlet and outlet boundary conditions
+| Parameter | Value |
+|---|---|
+| Parent artery diameter | 5 mm |
+| Aneurysm sac diameter | 6 mm |
+| Inlet velocity | 0.20 m/s |
+| Blood density | 1060 kg/m³ |
+| Dynamic viscosity | 0.0035 Pa·s |
+| Kinematic viscosity | 3.30 × 10⁻⁶ m²/s |
+| Approximate parent-artery Reynolds number | 303 |
+| Vessel-wall behaviour | Rigid, no-slip |
+| Inlet condition | Uniform prescribed velocity |
+| Outlet condition | Reference kinematic pressure of 0 |
+| Flow model | Steady, incompressible, laminar |
+| Blood rheology | Newtonian |
 
-These assumptions may be refined in subsequent experiments.
+These assumptions simplify the haemodynamic problem and allow an initial demonstration of the CFD workflow.
+
+In particular, the model does not incorporate cardiac-cycle pulsatility, vessel-wall deformation, patient-specific vascular anatomy or non-Newtonian blood behaviour.
+
+Although the simulation demonstrates apparent intra-aneurysmal recirculation, this should not be interpreted as evidence of turbulent flow.
 
 ### Numerical Simulation
 
-OpenFOAM 14 will be used to solve the governing fluid-flow equations using the finite-volume method.
+The simulation was performed using **OpenFOAM Foundation 14**, employing its `incompressibleFluid` solver and a laminar momentum-transport model.
 
-Mesh quality will be assessed before simulation. Numerical reliability will be investigated through mesh-refinement comparisons and monitoring of solver convergence and conservation properties.
+The computational domain was discretised into 3,882 tetrahedral cells using Gmsh. The mesh was imported into OpenFOAM and passed the `checkMesh` quality assessment.
+
+The governing fluid-flow equations were solved using the finite-volume method. Velocity and pressure fields were subsequently examined in ParaView 6.2.0.
+
+The present simulation represents an initial computational demonstration. A formal assessment of numerical convergence, mesh independence and mass conservation has not yet been documented.
 
 ### Haemodynamic Analysis
 
-Planned outputs include:
+The following haemodynamic outputs were generated:
 
-- Velocity magnitude and vector fields
-- Flow streamlines and recirculation patterns
-- Pressure distribution
-- Wall shear stress magnitude and spatial distribution
-- Comparative haemodynamic measurements between aneurysm geometries
+- **Velocity magnitude:** Visualised using a longitudinal cross-section through the aneurysm and parent artery.
+- **Flow streamlines:** Used to illustrate parent-artery flow and apparent intra-aneurysmal recirculation.
+- **Wall shear stress:** Calculated using OpenFOAM's `wallShearStress` function and converted into pascals using the assumed blood density of 1060 kg/m³.
+
+The velocity and WSS distributions were visualised in ParaView.
+
+Although the simulation also produced a pressure field, a dedicated pressure-distribution analysis has not yet been completed.
+
+The resulting haemodynamic patterns are interpreted qualitatively because the preliminary mesh lacks sufficient near-wall refinement and has not undergone a mesh-convergence study.
+
+Future analysis may include pulsatile flow, time-averaged wall shear stress, oscillatory shear index, residence-time estimates and comparisons between different aneurysm geometries.
+
+## Reproducing the Simulation
+
+The repository contains the synthetic aneurysm geometry, mesh-generation script, OpenFOAM case configuration and selected visualisations.
+
+Generated computational meshes and simulation time-step results are excluded from version control to avoid storing unnecessary intermediate files.
+
+### Software Requirements
+
+- OpenFOAM Foundation 14
+- Gmsh 4.15.2 with Python bindings
+- Python 3.11
+- ParaView 6.2.0
+
+### Computational Workflow
+
+**1. Generate the computational mesh**
+
+From the repository root:
+
+```bash
+python mesh/01_generate_aneurysm_mesh.py
+```
+
+This generates the preliminary tetrahedral mesh from the synthetic aneurysm geometry.
+
+**2. Import the mesh into OpenFOAM**
+
+```bash
+gmshToFoam \
+    -case cases/synthetic_aneurysm \
+    mesh/aneurysm_coarse.msh
+```
+
+**3. Check mesh quality**
+
+```bash
+checkMesh -case cases/synthetic_aneurysm
+```
+
+**4. Run the CFD simulation**
+
+```bash
+foamRun \
+    -solver incompressibleFluid \
+    -case cases/synthetic_aneurysm
+```
+
+**5. Calculate wall shear stress**
+
+After obtaining a saved simulation result:
+
+```bash
+foamPostProcess \
+    -case cases/synthetic_aneurysm \
+    -solver incompressibleFluid \
+    -func wallShearStress \
+    -latestTime
+```
+
+For the incompressible model, the resulting kinematic wall shear stress was converted to pascals by multiplying its magnitude by the assumed blood density of 1060 kg/m³.
+
+**6. Visualise the results**
+
+Open `cases/synthetic_aneurysm/synthetic_aneurysm.OpenFOAM` in ParaView.
+
+A saved visualisation state is provided at:
+
+`visualisation/aneurysm_cfd.pvsm`
+
+The state contains the configured visualisation pipeline, including streamline filters and wall shear stress calculations. File references may require adjustment when loading the state on a different computer.
+
+### Reproducibility Limitations
+
+This workflow reproduces the initial synthetic aneurysm CFD demonstration, subject to software compatibility and numerical settings.
+
+The mesh and solver results have not undergone formal mesh-convergence or numerical validation studies. Consequently, the outputs should not be considered quantitatively validated haemodynamic measurements.
 
 
 ## Technical Documentation
@@ -190,7 +373,7 @@ Large datasets, generated meshes and intermediate solver outputs will not be sto
 - OpenFOAM 14
 - Python
 - Gmsh 4.15.2
-- ParaView (planned)
+- ParaView 6.2.0 — CFD post-processing, streamline visualisation and wall shear stress mapping
 - Ubuntu 26.04 LTS under WSL2
 
 
@@ -202,17 +385,22 @@ Large datasets, generated meshes and intermediate solver outputs will not be sto
 - [x] Verify tutorial mesh quality and solver execution
 
 ### Synthetic Aneurysm Model
+
 - [x] Construct a three-dimensional synthetic sidewall aneurysm
 - [x] Refine the aneurysm neck geometry
 - [x] Generate a preliminary tetrahedral computational mesh using Gmsh
 - [x] Define inlet, outlet and vessel-wall boundary regions
 - [x] Import the mesh into OpenFOAM 14
-- [x] Validate the preliminary mesh using `checkMesh`
-- [ ] Configure physiological flow conditions
-- [ ] Run the initial aneurysm CFD simulation
-- [ ] Visualise velocity, pressure and flow streamlines
+- [x] Validate preliminary mesh integrity using `checkMesh`
+- [x] Configure simplified physiological flow conditions
+- [x] Run the initial steady-state laminar CFD simulation
+- [x] Visualise velocity magnitude and parent-artery streamlines
+- [x] Visualise apparent intra-aneurysmal flow recirculation
+- [x] Calculate and visualise preliminary wall shear stress
+- [x] Save the ParaView visualisation pipeline
+- [ ] Verify solver convergence and mass conservation
 - [ ] Refine the computational mesh and assess mesh convergence
-- [ ] Analyse wall shear stress distributions
+- [ ] Analyse the pressure distribution
 - [ ] Compare haemodynamic characteristics between aneurysm geometries
 
 ### Patient-Derived Aneurysm Demonstration
@@ -225,8 +413,9 @@ Large datasets, generated meshes and intermediate solver outputs will not be sto
 ### Documentation
 - [x] Document synthetic geometry construction and initial mesh validation
 - [ ] Create an annotated computational mesh figure
-- [ ] Document simulation parameters and numerical verification
-- [ ] Complete project results, limitations and interpretation
+- [x] Document simulation parameters and preliminary numerical limitations
+- [x] Document initial CFD results and their qualitative interpretation
+- [ ] Complete numerical verification and mesh-convergence assessment
 
 
 
