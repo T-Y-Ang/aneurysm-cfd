@@ -43,6 +43,10 @@ env/
 **/[0-9]*/
 **/[0-9]*.[0-9]*/
 
+# Keep the OpenFOAM initial and boundary conditions
+!**/0/
+!**/0/**
+
 # ------------------------------------------------------------
 # Large simulation and visualisation outputs
 # ------------------------------------------------------------

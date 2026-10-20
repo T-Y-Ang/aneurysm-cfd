@@ -1,0 +1,38 @@
+
+/*--------------------------------*- C++ -*----------------------------------*\
+| OpenFOAM 14                                                               |
+| Synthetic intracranial aneurysm CFD demonstration                          |
+\*---------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volVectorField;
+    object      U;
+}
+
+// Velocity dimensions: metres per second (m/s)
+dimensions      [0 1 -1 0 0 0 0];
+
+// Initial velocity inside the computational domain
+internalField   uniform (0 0 0);
+
+boundaryField
+{
+    inlet
+    {
+        type            fixedValue;
+        value           uniform (0.20 0 0);
+    }
+
+    outlet
+    {
+        type            zeroGradient;
+    }
+
+    walls
+    {
+        type            noSlip;
+    }
+}

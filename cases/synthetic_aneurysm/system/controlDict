@@ -1,6 +1,6 @@
 
 /*--------------------------------*- C++ -*----------------------------------*\
-| OpenFOAM configuration file                                               |
+| OpenFOAM 14                                                               |
 | Synthetic intracranial aneurysm CFD demonstration                          |
 \*---------------------------------------------------------------------------*/
 
@@ -12,20 +12,25 @@ FoamFile
     object      controlDict;
 }
 
-// Placeholder settings for initial mesh conversion.
-// We will configure the actual blood-flow solver later.
-
+// OpenFOAM solver.
 application     foamRun;
+solver          incompressibleFluid;
+
+// Simulation control.
+// For a steady-state simulation, these steps represent iterations,
+// not elapsed physiological time.
 
 startFrom       startTime;
 startTime       0;
 
 stopAt          endTime;
-endTime         1;
+endTime         500;
 
-deltaT          0.001;
+deltaT          1;
 
+// Save calculated fields every 100 iterations.
 writeControl    timeStep;
 writeInterval   100;
 
+// Allow configuration changes while running.
 runTimeModifiable true;

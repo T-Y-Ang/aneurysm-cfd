@@ -1,0 +1,22 @@
+
+/*--------------------------------*- C++ -*----------------------------------*\
+| OpenFOAM 14                                                               |
+| Synthetic intracranial aneurysm CFD demonstration                          |
+\*---------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      physicalProperties;
+}
+
+// Blood is approximated as a Newtonian fluid with constant viscosity.
+
+viscosityModel  constant;
+
+// Kinematic viscosity (m^2/s)
+// Calculated as 0.0035 Pa.s / 1060 kg/m^3
+
+nu              [0 2 -1 0 0 0 0] 3.3018868e-06;
