@@ -20,6 +20,12 @@ env/
 .env
 
 # ------------------------------------------------------------
+# Gmsh generated mesh files
+# Meshes can be regenerated from the Python meshing scripts
+# ------------------------------------------------------------
+*.msh
+
+# ------------------------------------------------------------
 # OpenFOAM generated mesh and processor data
 # ------------------------------------------------------------
 **/polyMesh/
