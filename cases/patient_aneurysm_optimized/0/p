@@ -1,0 +1,49 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  Patient-specific intracranial aneurysm CFD
+  Initial kinematic pressure field
+\*---------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    location    "0";
+    object      p;
+}
+
+// Kinematic pressure dimensions: m2/s2.
+dimensions      [0 2 -2 0 0 0 0];
+
+// Initialise the pressure field at zero gauge pressure.
+internalField   uniform 0;
+
+boundaryField
+{
+    // Proximal parent artery inlet:
+    // Pressure is calculated from the interior solution.
+    opening_0
+    {
+        type            zeroGradient;
+    }
+
+    // First distal outlet: reference pressure.
+    opening_1
+    {
+        type            fixedValue;
+        value           uniform 0;
+    }
+
+    // Second distal outlet: same reference pressure.
+    opening_2
+    {
+        type            fixedValue;
+        value           uniform 0;
+    }
+
+    // No pressure gradient normal to the stationary wall.
+    vessel_wall
+    {
+        type            zeroGradient;
+    }
+}

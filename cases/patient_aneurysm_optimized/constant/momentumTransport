@@ -1,0 +1,16 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  Patient-specific intracranial aneurysm CFD
+  Laminar momentum transport model
+\*---------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "constant";
+    object      momentumTransport;
+}
+
+// Use a laminar-flow model without turbulence modelling.
+simulationType  laminar;

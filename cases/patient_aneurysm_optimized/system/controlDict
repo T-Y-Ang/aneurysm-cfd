@@ -1,0 +1,38 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  Patient-specific intracranial aneurysm CFD
+  Initial steady-state laminar blood-flow simulation
+\*---------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      controlDict;
+}
+
+// OpenFOAM Foundation v14 incompressible-flow solver.
+solver          incompressibleFluid;
+
+// Start from the initial conditions in the 0 directory.
+startFrom       startTime;
+startTime       0;
+
+// For a steady-state solver, these represent iteration steps,
+// not 1000 seconds of physiological blood flow.
+stopAt          endTime;
+endTime         1000;
+deltaT          1;
+
+// Save results every 100 iterations.
+writeControl    timeStep;
+writeInterval   100;
+
+// Keep the output files for subsequent visualisation.
+purgeWrite      0;
+writeFormat     binary;
+writePrecision  8;
+
+// Allow selected settings to be modified during execution.
+runTimeModifiable true;
