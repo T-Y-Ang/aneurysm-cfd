@@ -1,7 +1,5 @@
 # Intracranial Aneurysm Haemodynamics — Computational Fluid Dynamics
 
-**A computational investigation of blood-flow characteristics in a synthetic intracranial saccular aneurysm using OpenFOAM.**
-
 **A computational investigation of intracranial aneurysm haemodynamics using synthetic and patient-derived vascular geometries, OpenFOAM and ParaView.**
 
 **Project status:** Preliminary CFD simulations completed for both a synthetic sidewall aneurysm and a patient-derived middle cerebral artery (MCA) bifurcation aneurysm. Velocity distributions, flow streamlines and exploratory haemodynamic visualisations have been generated. Mesh refinement, numerical validation and further patient-derived wall shear stress analysis remain ongoing.
@@ -27,138 +25,6 @@ How do changes in intracranial aneurysm geometry influence local haemodynamic ch
 5. Visualise flow patterns and regions of intra-aneurysmal recirculation.
 6. Compare haemodynamic characteristics between different synthetic aneurysm geometries.
 7. Evaluate numerical reliability and document modelling assumptions and limitations.
-
-## Patient-Derived Aneurysm CFD Demonstration
-
-In addition to the synthetic aneurysm model, this project aims to demonstrate the application of computational fluid dynamics to a single intracranial aneurysm identified on publicly available, de-identified neurovascular imaging.
-
-### Objectives
-
-1. Identify a suitable open-access CTA, MRA or 3D rotational angiography dataset containing an intracranial aneurysm.
-2. Select one imaging case with sufficient anatomical resolution for vascular reconstruction.
-3. Segment the aneurysm and parent vessel from the imaging data.
-4. Generate a three-dimensional vascular surface model and computational mesh.
-5. Apply simplified physiological flow conditions and perform CFD simulation using OpenFOAM.
-6. Visualise velocity distributions, intra-aneurysmal flow patterns, pressure and wall shear stress.
-7. Compare the practical challenges of image-derived modelling against the synthetic aneurysm simulation.
-
-### Intended Outputs
-
-- Representative angiographic images showing the aneurysm
-- Three-dimensional reconstruction of the aneurysm and parent vessel
-- Computational mesh visualisation
-- Velocity streamlines and flow recirculation patterns
-- Wall shear stress distribution over the aneurysm surface
-
-### Data and Methodological Considerations
-
-The imaging dataset will be selected based on accessibility, anatomical suitability, image quality and permissions for research use and publication.
-
-The demonstration will use one de-identified case and will not attempt to predict patient-specific rupture risk.
-
-Where patient-specific physiological measurements are unavailable, flow boundary conditions will be based on explicitly documented assumptions. The resulting haemodynamic measurements will therefore represent an exploratory simulation rather than a clinically validated patient-specific assessment.
-
-## Patient-Derived MCA Aneurysm — Preliminary CFD Results
-
-### Clinical and Computational Objectives
-
-To extend the initial synthetic aneurysm demonstration, a patient-derived intracranial aneurysm geometry was obtained from the publicly available OpenNeuro dataset **ds005096**, using subject **sub-038**.
-
-The selected geometry represents a left middle cerebral artery (MCA) bifurcation aneurysm reconstructed from time-of-flight magnetic resonance angiography (TOF-MRA).
-
-The objective was to investigate whether a patient-derived vascular geometry could be converted into a computational fluid domain suitable for preliminary CFD analysis using OpenFOAM.
-
-This demonstration focuses on computational feasibility and qualitative flow visualisation rather than patient-specific haemodynamic validation or rupture-risk prediction.
-
-### 1. Three-Dimensional Vascular Reconstruction
-
-The image-derived vascular surface was processed to produce a closed computational fluid domain comprising the aneurysm sac and adjoining arterial branches.
-
-The workflow included surface inspection, treatment of vessel openings, surface remeshing, boundary classification and tetrahedral volume-mesh generation.
-
-![Patient-derived MCA aneurysm geometry](outputs/figures/patient_aneurysm_geometry.png)
-
-*Figure 8. Three-dimensional patient-derived MCA bifurcation aneurysm geometry used for exploratory CFD modelling.*
-
-### 2. Computational Mesh
-
-The reconstructed vascular domain was tetrahedralised using TetGen, with subsequent mesh optimisation and boundary classification.
-
-The resulting mesh contained approximately **117,490 tetrahedral cells** and **26,919 mesh points**.
-
-Three vascular openings and the vessel wall were assigned separate boundary regions.
-
-The mesh was imported into OpenFOAM 14 and converted from millimetres to metres.
-
-**Mesh-quality limitations:** OpenFOAM's mesh assessment identified localised non-orthogonality and cell-quality problems. Although the mesh topology was valid and the simulation could be executed, these quality issues require further refinement before quantitative haemodynamic measurements can be considered reliable.
-
-### 3. CFD Simulation
-
-A preliminary steady-state, incompressible, laminar-flow simulation was performed using OpenFOAM Foundation 14.
-
-| Parameter | Preliminary configuration |
-|---|---|
-| Geometry | Patient-derived left MCA bifurcation aneurysm |
-| Mesh | Approximately 117,490 tetrahedral cells |
-| Inlet velocity | 0.10 m/s, prescribed uniformly |
-| Blood density | 1060 kg/m³ |
-| Dynamic viscosity | 0.0035 Pa·s |
-| Kinematic viscosity | Approximately 3.30 × 10⁻⁶ m²/s |
-| Vessel wall | Rigid, no-slip |
-| Outlet conditions | Reference kinematic pressure |
-| Flow model | Steady, incompressible, laminar |
-| Blood rheology | Newtonian |
-| CFD software | OpenFOAM Foundation 14 |
-
-The simulation reached the configured solver residual criteria at iteration **663**.
-
-The selected inlet, outlets and flow boundary conditions were provisional and have not been verified against patient-specific vascular flow measurements.
-
-Consequently, the simulation should be interpreted as a demonstration of the computational workflow, not as a physiologically validated representation of this patient's cerebral circulation.
-
-### 4. Velocity Streamlines and Intra-aneurysmal Flow
-
-![Patient-derived aneurysm velocity streamlines](outputs/figures/patient_aneurysm_streamlines.png)
-
-*Figure 9. Velocity-coloured streamlines through the patient-derived MCA aneurysm geometry. The visualisation illustrates complex flow trajectories within the aneurysm sac and adjoining arterial branches.*
-
-The preliminary solution demonstrates curved flow trajectories and apparent intra-aneurysmal recirculation.
-
-Streamlines provide an intuitive representation of the simulated velocity field but are sensitive to seed placement and numerical assumptions.
-
-These findings do not establish turbulent flow, thrombosis, aneurysm instability or rupture risk.
-
-### 5. Vorticity Distribution
-
-Vorticity describes the local rotational characteristics of a velocity field and is calculated from the curl of the velocity vector.
-
-![Patient-derived aneurysm vorticity magnitude](outputs/figures/patient_aneurysm_vorticity.png)
-
-*Figure 10. Preliminary vorticity-magnitude visualisation of the patient-derived MCA aneurysm model. Values are expressed in reciprocal seconds (s⁻¹).*
-
-The visualisation demonstrates spatially heterogeneous vorticity, including localised regions of higher calculated magnitude near curved vascular segments and branch junctions.
-
-Because the mesh contains localised quality defects, isolated high-vorticity regions may be influenced by numerical discretisation errors.
-
-Vorticity should not be equated directly with turbulence or wall shear stress.
-
-### 6. Current Limitations and Next Steps
-
-This patient-derived demonstration remains exploratory.
-
-Important limitations include:
-
-- Unverified anatomical inlet and outlet assignments.
-- Assumed rather than measured patient-specific flow conditions.
-- A steady-state model that does not represent cardiac-cycle pulsatility.
-- Rigid vessel walls and Newtonian blood rheology.
-- Localised computational mesh-quality deficiencies.
-- No mesh-independence or boundary-condition sensitivity study.
-- No validation against measured patient-specific haemodynamics.
-
-**Planned next steps** include internal vorticity visualisation, wall shear stress calculation, targeted mesh refinement, assessment of mass conservation and sensitivity analysis.
-
-The present results are intended to demonstrate the feasibility of an image-derived neurovascular CFD workflow and must not be used to guide clinical decision-making.
 
 ## From Aneurysm Geometry to Computational Mesh
 
@@ -315,6 +181,158 @@ Together with the inlet–outlet flow balance assessed at iteration 93, these re
 
 ---
 
+## Patient-Derived Aneurysm CFD Demonstration
+
+In addition to the synthetic aneurysm model, this project aims to demonstrate the application of computational fluid dynamics to a single intracranial aneurysm identified on publicly available, de-identified neurovascular imaging.
+
+### Objectives
+
+1. Identify a suitable open-access CTA, MRA or 3D rotational angiography dataset containing an intracranial aneurysm.
+2. Select one imaging case with sufficient anatomical resolution for vascular reconstruction.
+3. Segment the aneurysm and parent vessel from the imaging data.
+4. Generate a three-dimensional vascular surface model and computational mesh.
+5. Apply simplified physiological flow conditions and perform CFD simulation using OpenFOAM.
+6. Visualise velocity distributions, intra-aneurysmal flow patterns, pressure and wall shear stress.
+7. Compare the practical challenges of image-derived modelling against the synthetic aneurysm simulation.
+
+### Intended Outputs
+
+- Representative angiographic images showing the aneurysm
+- Three-dimensional reconstruction of the aneurysm and parent vessel
+- Computational mesh visualisation
+- Velocity streamlines and flow recirculation patterns
+- Wall shear stress distribution over the aneurysm surface
+
+### Data and Methodological Considerations
+
+The imaging dataset will be selected based on accessibility, anatomical suitability, image quality and permissions for research use and publication.
+
+The demonstration will use one de-identified case and will not attempt to predict patient-specific rupture risk.
+
+Where patient-specific physiological measurements are unavailable, flow boundary conditions will be based on explicitly documented assumptions. The resulting haemodynamic measurements will therefore represent an exploratory simulation rather than a clinically validated patient-specific assessment.
+
+## Patient-Derived MCA Aneurysm — Preliminary CFD Results
+
+### Imaging Dataset and Attribution
+
+The patient-derived aneurysm geometry was obtained from the **Royal Brisbane TOF-MRA Intracranial Aneurysm Database**, publicly available through OpenNeuro (dataset **ds005096**).
+
+The dataset was developed using neurovascular imaging obtained through Metro North Hospital and Health Service and the Royal Brisbane and Women's Hospital, Australia.
+
+It contains time-of-flight magnetic resonance angiography (TOF-MRA) examinations, clinician-derived aneurysm and parent-vessel segmentations, and three-dimensional vascular models.
+
+For this demonstration, **subject sub-038** was selected to investigate blood flow within a left middle cerebral artery (MCA) bifurcation aneurysm.
+
+The source vascular geometry was processed for computational meshing and subsequently analysed using OpenFOAM. The CFD simulations, boundary conditions, numerical results and visualisations presented here are independently generated exploratory outputs and should not be attributed to the original dataset authors.
+
+**Dataset and publication references:**
+
+1. de Nys CM, et al. *Time-of-Flight MRA of Intracranial Aneurysms with Interval Surveillance, Clinical Segmentation and Annotations.* Scientific Data. 2024;11:555. https://doi.org/10.1038/s41597-024-03397-8
+2. de Nys CM, et al. *Royal Brisbane_TOFMRA_Intracranial Aneurysm_Database.* OpenNeuro, dataset ds005096. https://doi.org/10.18112/openneuro.ds005096.v1.0.0
+
+The original imaging data are not redistributed in this repository. Readers wishing to reproduce the image-derived workflow should obtain the source dataset directly from OpenNeuro.
+
+### Clinical and Computational Objectives
+
+To extend the initial synthetic aneurysm demonstration, a patient-derived intracranial aneurysm geometry was obtained from the publicly available OpenNeuro dataset **ds005096**, using subject **sub-038**.
+
+The selected geometry represents a left middle cerebral artery (MCA) bifurcation aneurysm reconstructed from time-of-flight magnetic resonance angiography (TOF-MRA).
+
+The objective was to investigate whether a patient-derived vascular geometry could be converted into a computational fluid domain suitable for preliminary CFD analysis using OpenFOAM.
+
+This demonstration focuses on computational feasibility and qualitative flow visualisation rather than patient-specific haemodynamic validation or rupture-risk prediction.
+
+### 1. Three-Dimensional Vascular Reconstruction
+
+The image-derived vascular surface was processed to produce a closed computational fluid domain comprising the aneurysm sac and adjoining arterial branches.
+
+The workflow included surface inspection, treatment of vessel openings, surface remeshing, boundary classification and tetrahedral volume-mesh generation.
+
+![Patient-derived MCA aneurysm geometry](outputs/figures/patient_aneurysm_geometry.png)
+
+*Figure 8. Three-dimensional patient-derived MCA bifurcation aneurysm geometry used for exploratory CFD modelling.*
+
+### 2. Computational Mesh
+
+The reconstructed vascular domain was tetrahedralised using TetGen, with subsequent mesh optimisation and boundary classification.
+
+The resulting mesh contained approximately **117,490 tetrahedral cells** and **26,919 mesh points**.
+
+Three vascular openings and the vessel wall were assigned separate boundary regions.
+
+The mesh was imported into OpenFOAM 14 and converted from millimetres to metres.
+
+**Mesh-quality limitations:** OpenFOAM's mesh assessment identified localised non-orthogonality and cell-quality problems. Although the mesh topology was valid and the simulation could be executed, these quality issues require further refinement before quantitative haemodynamic measurements can be considered reliable.
+
+### 3. CFD Simulation
+
+A preliminary steady-state, incompressible, laminar-flow simulation was performed using OpenFOAM Foundation 14.
+
+| Parameter | Preliminary configuration |
+|---|---|
+| Geometry | Patient-derived left MCA bifurcation aneurysm |
+| Mesh | Approximately 117,490 tetrahedral cells |
+| Inlet velocity | 0.10 m/s, prescribed uniformly |
+| Blood density | 1060 kg/m³ |
+| Dynamic viscosity | 0.0035 Pa·s |
+| Kinematic viscosity | Approximately 3.30 × 10⁻⁶ m²/s |
+| Vessel wall | Rigid, no-slip |
+| Outlet conditions | Reference kinematic pressure |
+| Flow model | Steady, incompressible, laminar |
+| Blood rheology | Newtonian |
+| CFD software | OpenFOAM Foundation 14 |
+
+The simulation reached the configured solver residual criteria at iteration **663**.
+
+The selected inlet, outlets and flow boundary conditions were provisional and have not been verified against patient-specific vascular flow measurements.
+
+Consequently, the simulation should be interpreted as a demonstration of the computational workflow, not as a physiologically validated representation of this patient's cerebral circulation.
+
+### 4. Velocity Streamlines and Intra-aneurysmal Flow
+
+![Patient-derived aneurysm velocity streamlines](outputs/figures/patient_aneurysm_streamlines.png)
+
+*Figure 9. Velocity-coloured streamlines through the patient-derived MCA aneurysm geometry. The visualisation illustrates complex flow trajectories within the aneurysm sac and adjoining arterial branches.*
+
+The preliminary solution demonstrates curved flow trajectories and apparent intra-aneurysmal recirculation.
+
+Streamlines provide an intuitive representation of the simulated velocity field but are sensitive to seed placement and numerical assumptions.
+
+These findings do not establish turbulent flow, thrombosis, aneurysm instability or rupture risk.
+
+### 5. Vorticity Distribution
+
+Vorticity describes the local rotational characteristics of a velocity field and is calculated from the curl of the velocity vector.
+
+![Patient-derived aneurysm vorticity magnitude](outputs/figures/patient_aneurysm_vorticity.png)
+
+*Figure 10. Preliminary vorticity-magnitude visualisation of the patient-derived MCA aneurysm model. Values are expressed in reciprocal seconds (s⁻¹).*
+
+The visualisation demonstrates spatially heterogeneous vorticity, including localised regions of higher calculated magnitude near curved vascular segments and branch junctions.
+
+Because the mesh contains localised quality defects, isolated high-vorticity regions may be influenced by numerical discretisation errors.
+
+Vorticity should not be equated directly with turbulence or wall shear stress.
+
+### 6. Current Limitations and Next Steps
+
+This patient-derived demonstration remains exploratory.
+
+Important limitations include:
+
+- Unverified anatomical inlet and outlet assignments.
+- Assumed rather than measured patient-specific flow conditions.
+- A steady-state model that does not represent cardiac-cycle pulsatility.
+- Rigid vessel walls and Newtonian blood rheology.
+- Localised computational mesh-quality deficiencies.
+- No mesh-independence or boundary-condition sensitivity study.
+- No validation against measured patient-specific haemodynamics.
+
+**Planned next steps** include internal vorticity visualisation, wall shear stress calculation, targeted mesh refinement, assessment of mass conservation and sensitivity analysis.
+
+The present results are intended to demonstrate the feasibility of an image-derived neurovascular CFD workflow and must not be used to guide clinical decision-making.
+
+---
 
 ## Computational Methodology
 
