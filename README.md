@@ -565,6 +565,7 @@ Large datasets, generated meshes and intermediate solver outputs will not be sto
 
 ### Patient-Derived Aneurysm Demonstration
 
+**Completed**
 - [x] Identify a suitable publicly available neurovascular imaging dataset
 - [x] Obtain and inspect a patient-derived MCA aneurysm geometry
 - [x] Reconstruct and close the vascular surface
@@ -575,17 +576,35 @@ Large datasets, generated meshes and intermediate solver outputs will not be sto
 - [x] Generate velocity streamline visualisations
 - [x] Calculate and visualise preliminary vorticity
 - [x] Save selected portfolio figures
-- [ ] Verify inlet and outlet anatomical assignments
-- [ ] Refine the mesh and address quality warnings
-- [ ] Quantify mass conservation and assess numerical reliability
-- [ ] Calculate and visualise wall shear stress
+- [x] Verify inlet and outlet anatomical assignments
+- [x] Quantify mass conservation for the baseline simulation
+- [x] Calculate and visualise preliminary wall shear stress
+- [x] Generate a refined tetrahedral mesh for comparison
+- [x] Assess baseline and refined mesh quality using `checkMesh`
+- [x] Visualise mesh-quality warnings in ParaView
+
+**In Progress / Planned**
+- [ ] Investigate and address remaining mesh-quality warnings
+- [ ] Run CFD simulation using the refined mesh
+- [ ] Compare haemodynamic results between baseline and refined meshes
 - [ ] Perform mesh-convergence and sensitivity analyses
+- [ ] Assess the numerical reliability and limitations of the final results
+
+**Preliminary Mesh-Refinement Findings**
+
+The baseline patient-derived aneurysm mesh contains 117,490 tetrahedral cells. A refined mesh containing 221,743 cells has subsequently been generated using TetGen with an explicit maximum tetrahedral volume constraint.
+
+Although the refined mesh exhibits improved average non-orthogonality and a lower proportion of underdetermined cells, some mesh-quality warnings persist. Further optimisation and numerical verification are required before mesh-independent haemodynamic conclusions can be drawn.
 
 ### Documentation
+
 - [x] Document synthetic geometry construction and initial mesh validation
-- [ ] Create an annotated computational mesh figure
+- [x] Create an annotated computational mesh figure
 - [x] Document simulation parameters and preliminary numerical limitations
 - [x] Document initial CFD results and their qualitative interpretation
+- [x] Document preliminary patient-derived mesh-quality findings
+- [x] Verify baseline patient-derived simulation mass conservation
+- [ ] Document the refined-mesh CFD comparison
 - [ ] Complete numerical verification and mesh-convergence assessment
 
 
