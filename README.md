@@ -314,7 +314,33 @@ Because the mesh contains localised quality defects, isolated high-vorticity reg
 
 Vorticity should not be equated directly with turbulence or wall shear stress.
 
-### 6. Current Limitations and Next Steps
+### 6. Wall Shear Stress Distribution
+
+Wall shear stress (WSS) describes the tangential frictional stress exerted by flowing blood on the vascular endothelium. Its spatial distribution is an important haemodynamic characteristic in intracranial aneurysm research.
+
+WSS was calculated from the converged steady-state velocity field using OpenFOAM Foundation 14's `wallShearStress` function object.
+
+During post-processing, the vessel-wall mesh boundary was explicitly classified as `wall`, while retaining the `noSlip` velocity boundary condition. This correction enabled OpenFOAM to identify the vascular surface and calculate nonzero WSS values.
+
+Because the incompressible OpenFOAM solver reports kinematic wall shear stress, the vector magnitude was multiplied by the assumed blood density of 1060 kg/m³ to obtain dynamic WSS in pascals:
+
+\[
+\mathrm{WSS\ (Pa)} = 1060 \times |\mathrm{wallShearStress}|
+\]
+
+![Patient-derived MCA aneurysm wall shear stress](outputs/figures/patient_mca_wall_shear_stress.png)
+
+*Figure 11. Preliminary wall shear stress magnitude (Pa) across the patient-derived left MCA bifurcation aneurysm and adjacent arterial branches. The visualisation was generated using OpenFOAM 14 and ParaView. The displayed range is approximately 0–19 Pa.*
+
+The preliminary visualisation demonstrates a spatially heterogeneous WSS distribution, with relatively lower calculated values across much of the aneurysm sac and higher values along selected portions of the adjacent arterial branches.
+
+These observations are descriptive and should not be interpreted as evidence of aneurysm stability, instability or rupture risk.
+
+**Methodological limitations:** The computational mesh contains localised quality deficiencies and lacks dedicated near-wall refinement. Mesh independence has not been established, and the simulation uses assumed inlet velocity, steady-state flow, rigid vessel walls and Newtonian blood rheology. Consequently, the absolute WSS magnitudes and their spatial distribution remain exploratory.
+
+The ParaView visualisation state is saved as `outputs/patient_mca_wss_visualisation.pvsm` to facilitate reproduction of the figure, provided the corresponding VTK data are available.
+
+### 7. Current Limitations and Next Steps
 
 This patient-derived demonstration remains exploratory.
 
@@ -328,7 +354,9 @@ Important limitations include:
 - No mesh-independence or boundary-condition sensitivity study.
 - No validation against measured patient-specific haemodynamics.
 
-**Planned next steps** include internal vorticity visualisation, wall shear stress calculation, targeted mesh refinement, assessment of mass conservation and sensitivity analysis.
+**Planned next steps** include targeted mesh refinement, assessment of near-wall resolution, mesh-independence testing, mass-conservation verification, boundary-condition sensitivity analysis and further evaluation of the calculated haemodynamic fields.
+
+Velocity streamlines, vorticity and wall shear stress have now been visualised for the preliminary patient-derived model.
 
 The present results are intended to demonstrate the feasibility of an image-derived neurovascular CFD workflow and must not be used to guide clinical decision-making.
 
