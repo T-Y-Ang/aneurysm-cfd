@@ -322,6 +322,16 @@ WSS was calculated from the converged steady-state velocity field using OpenFOAM
 
 During post-processing, the vessel-wall mesh boundary was explicitly classified as `wall`, while retaining the `noSlip` velocity boundary condition. This correction enabled OpenFOAM to identify the vascular surface and calculate nonzero WSS values.
 
+To make this step reproducible, the repository includes `scripts/set_patient_wall_boundary.py`. After importing the patient-derived mesh into OpenFOAM, run:
+
+```bash
+python scripts/set_patient_wall_boundary.py
+```
+
+The utility updates the `vessel_wall` classification from `patch` to `wall`, preserves the existing mesh face definitions and creates a backup before modifying the boundary file. If the boundary is already correctly classified, it makes no changes.
+
+The script should be run before calculating WSS on a newly imported mesh.
+
 Because the incompressible OpenFOAM solver reports kinematic wall shear stress, the vector magnitude was multiplied by the assumed blood density of 1060 kg/m³ to obtain dynamic WSS in pascals:
 
 \[
