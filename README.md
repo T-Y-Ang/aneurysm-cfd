@@ -334,9 +334,9 @@ The script should be run before calculating WSS on a newly imported mesh.
 
 Because the incompressible OpenFOAM solver reports kinematic wall shear stress, the vector magnitude was multiplied by the assumed blood density of 1060 kg/m³ to obtain dynamic WSS in pascals:
 
-\[
-\mathrm{WSS\ (Pa)} = 1060 \times |\mathrm{wallShearStress}|
-\]
+$$
+\mathrm{WSS\ (Pa)} = 1060 \times \left|\mathrm{wallShearStress}\right|
+$$
 
 ![Patient-derived MCA aneurysm wall shear stress](outputs/figures/patient_mca_wall_shear_stress.png)
 
