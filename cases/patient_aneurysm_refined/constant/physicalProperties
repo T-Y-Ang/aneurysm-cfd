@@ -1,0 +1,30 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  14
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    location    "constant";
+    object      physicalProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+// Exploratory Newtonian blood model.
+//
+// Assumed dynamic viscosity: 0.0035 Pa.s
+// Assumed density: 1060 kg/m3
+//
+// Kinematic viscosity = dynamic viscosity / density
+//                     = 0.0035 / 1060
+//                     = 3.3019e-06 m2/s
+
+viscosityModel  constant;
+
+nu              3.3019e-06;
+
+// ************************************************************************* //

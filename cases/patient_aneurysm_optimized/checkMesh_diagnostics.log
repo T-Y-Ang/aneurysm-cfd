@@ -1,0 +1,111 @@
+/*---------------------------------------------------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  14
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+Build  : 14-a4867fc914c1
+Exec   : checkMesh -case cases/patient_aneurysm_optimized -constant -allTopology -allGeometry -writeSets -writeSurfaces
+Date   : Oct 26 2026
+Time   : 01:30:14
+Host   : "TYA-DESKTOP"
+PID    : 38862
+I/O    : uncollated
+Case   : cases/patient_aneurysm_optimized
+nProcs : 1
+sigFpe : Enabling floating point exception trapping (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 10)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+Create mesh for time = constant
+
+Enabling all (cell, face, edge, point) topology checks.
+
+Enabling all geometry checks.
+
+Reconstructing and writing surface representation of the faceSets and cellSets of problem faces in vtk format
+
+Reconstructing and writing the problem points in vtk format
+
+Time = constant
+
+Mesh stats
+    points:           26919
+    faces:            249781
+    internal faces:   220179
+    cells:            117490
+    faces per cell:   4
+    boundary patches: 4
+    point zones:      0
+    face zones:       0
+    cell zones:       1
+
+Overall number of cells of each type:
+    hexahedra:     0
+    prisms:        0
+    wedges:        0
+    pyramids:      0
+    tet wedges:    0
+    tetrahedra:    117490
+    polyhedra:     0
+
+Checking topology...
+    Boundary definition OK.
+    Cell to face addressing OK.
+    Point usage OK.
+    Upper triangular ordering OK.
+    Face vertices OK.
+    Topological cell zip-up check OK.
+    Face-face connectivity OK.
+  <<Writing 174 cells with two non-boundary faces to set twoInternalFacesCells
+    Number of regions: 1 (OK).
+
+Checking patch topology for multiply connected surfaces...
+    Patch               Faces    Points   Surface topology                  
+    vessel_wall         28960    14553    ok (non-closed singly connected)  
+    opening_0           369      221      ok (non-closed singly connected)  
+    opening_2           79       58       ok (non-closed singly connected)  
+    opening_1           194      119      ok (non-closed singly connected)  
+
+Checking geometry...
+    Overall domain bounding box (0.027 -0.011222297 -0.030098934) (0.042 0.0054444699 -0.023316181)
+    Patch bounding boxes
+        vessel_wall          (0.027 -0.011222297 -0.030098934) (0.042 0.0054444699 -0.023316181)
+        opening_0            (0.027 0.0019180039 -0.029916376) (0.027 0.0054444699 -0.026770395)
+        opening_2            (0.042 -0.0019234942 -0.029253349) (0.042 9.3838699e-05 -0.02820783)
+        opening_1            (0.03500872 -0.011222297 -0.027243927) (0.036630104 -0.0096009121 -0.025773626)
+    Mesh has 3 geometric (non-empty/wedge) directions (1 1 1)
+    Mesh has 3 solution (non-empty) directions (1 1 1)
+    Max cell openness = 2.6749969e-16 OK.
+    Max aspect ratio = 45.779058 OK.
+    Minimum face area = 7.4215072e-11. Maximum face area = 4.734017e-07.  Face area magnitudes OK.
+    Min volume = 2.465533e-16. Max volume = 1.1238188e-10.  Total volume = 1.698341e-07.  Cell volumes OK.
+    Mesh non-orthogonality Max: 86.609172 average: 19.166095
+   *Number of severely non-orthogonal (> 70 degrees) faces: 3.
+    Non-orthogonality check OK.
+  <<Writing 3 non-orthogonal faces to set nonOrthoFaces
+    Face pyramids OK.
+    Max skewness = 1.7655919 OK.
+    Coupled point location match (average 0) OK.
+    Face tets OK.
+    Min/max edge length = 1.1767511e-05 0.0012430914 OK.
+    All angles in faces OK.
+    All face flatness OK.
+    Cell determinant (wellposedness) : minimum: 0 average: 1.1792882
+ ***Cells with small determinant (< 0.001) found, number of cells: 290
+  <<Writing 290 under-determined cells to set underdeterminedCells
+    Concave cell check OK.
+    Face interpolation weight : minimum: 0.022479919 average: 0.41703994
+ ***Faces with small interpolation weight (< 0.05) found, number of faces: 43
+  <<Writing 43 faces with low interpolation weights to set lowWeightFaces
+    Face volume ratio : minimum: 0.022996887 average: 0.73549343
+    Face volume ratio check OK.
+
+Failed 2 mesh checks.
+
+End
+

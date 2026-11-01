@@ -1,0 +1,47 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  Patient-specific intracranial aneurysm CFD
+  Initial velocity field — exploratory steady-state simulation
+\*---------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volVectorField;
+    location    "0";
+    object      U;
+}
+
+// Velocity dimensions: metres per second.
+dimensions      [0 1 -1 0 0 0 0];
+
+// Initialise the fluid domain at rest.
+internalField   uniform (0 0 0);
+
+boundaryField
+{
+    // Provisional proximal parent artery inlet.
+    opening_0
+    {
+        type            fixedValue;
+        value           uniform (0.10 0 0);
+    }
+
+    // Distal branch outlet.
+    opening_1
+    {
+        type            zeroGradient;
+    }
+
+    // Distal branch outlet.
+    opening_2
+    {
+        type            zeroGradient;
+    }
+
+    // Stationary vessel wall: no-slip condition.
+    vessel_wall
+    {
+        type            noSlip;
+    }
+}
