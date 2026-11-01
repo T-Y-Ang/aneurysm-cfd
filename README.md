@@ -2,7 +2,15 @@
 
 **A computational investigation of intracranial aneurysm haemodynamics using synthetic and patient-derived vascular geometries, OpenFOAM and ParaView.**
 
-**Project status:** Preliminary CFD simulations completed for both a synthetic sidewall aneurysm and a patient-derived middle cerebral artery (MCA) bifurcation aneurysm. Velocity distributions, flow streamlines and exploratory haemodynamic visualisations have been generated. Mesh refinement, numerical validation and further patient-derived wall shear stress analysis remain ongoing.
+**Project status: Work in Progress — temporarily paused (November 2026).**
+
+Preliminary steady-state CFD simulations have been completed for both a synthetic sidewall aneurysm and a patient-derived left middle cerebral artery (MCA) bifurcation aneurysm. The project has produced velocity streamlines, vorticity visualisations, wall shear stress distributions and initial numerical verification results.
+
+A refined patient-derived tetrahedral mesh has also been generated, but further simulation and validation are pending. An unresolved concern regarding possible artificial narrowing of one vascular outlet, together with remaining mesh-quality limitations, requires correction before the patient-derived haemodynamic results can be considered reliable.
+
+The existing results are presented as an exploratory demonstration of the computational workflow rather than clinically validated haemodynamic measurements.
+
+**[Read the Patient-Derived MCA Aneurysm CFD Interim Technical Report](docs/patient_mca_cfd_interim_report.md)**
 
 ## Clinical Background
 
@@ -509,11 +517,16 @@ The mesh and solver results have not undergone formal mesh-convergence or numeri
 
 ## Technical Documentation
 
-For readers interested in the engineering methodology, detailed technical documentation is available:
+The following documents describe the computational methodology, preliminary findings and outstanding limitations:
 
-- [Technical Methodology](docs/methodology.md) — Geometry construction, mesh generation, boundary classification, OpenFOAM mesh validation and numerical limitations.
+- [Technical Methodology](docs/methodology.md) — Synthetic aneurysm geometry construction, meshing, boundary classification and OpenFOAM validation.
 
-The documentation will be expanded as the project progresses through blood-flow simulation, mesh refinement and haemodynamic analysis.
+- [Patient-Derived MCA Aneurysm CFD — Interim Technical Report](docs/patient_mca_cfd_interim_report.md) — Patient-derived geometry reconstruction, baseline CFD simulation, mesh refinement, preliminary haemodynamic results and unresolved limitations.
+
+The patient-derived CFD project is temporarily paused while development
+of a complementary spinal finite element analysis (FEA) project is prioritised.
+
+Further CFD development will focus on correcting the suspected outlet geometry artefact, improving mesh quality and evaluating numerical convergence before drawing quantitative haemodynamic conclusions.
 
 
 ## Project Structure
@@ -576,9 +589,11 @@ Large datasets, generated meshes and intermediate solver outputs will not be sto
 - [x] Calculate and visualise preliminary vorticity
 - [x] Save selected portfolio figures
 - [ ] Verify inlet and outlet anatomical assignments
+- [ ] Investigate and correct possible residual surface cap restricting one vascular outlet
 - [ ] Refine the mesh and address quality warnings
-- [ ] Quantify mass conservation and assess numerical reliability
-- [ ] Calculate and visualise wall shear stress
+- [x] Verify preliminary global mass conservation
+- [ ] Complete numerical reliability and mesh-convergence assessments
+- [x] Calculate and visualise preliminary wall shear stress
 - [ ] Perform mesh-convergence and sensitivity analyses
 
 ### Documentation
